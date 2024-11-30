@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhoneMe - تعرف على اسمك</title>
+  <!-- روابط الخطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #3a6073, #16222a);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* خلفية متحركة */
+	
+     body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #00b894, #0984e3, #6c5ce7, #fd79a8);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+      z-index: -1;
+    }
+@keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+	
+    .container {
+      text-align: center;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px; /* التباعد بين العناصر */
+      backdrop-filter: blur(15px);
+    }
+
+    input[type="text"], button.search-btn {
+      height: 50px;
+      font-size: 1.5rem;
+      font-family: 'Cairo', sans-serif;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      margin: 0;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 0 15px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      transition: box-shadow 0.3s ease;
+      letter-spacing: 2px; /* مسافة بين الأرقام */
+    }
+
+    input[type="text"]::placeholder {
+      color: #ddd;
+    }
+
+    input[type="text"]:focus {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+
+    input[type="text"]::-webkit-inner-spin-button, 
+    input[type="text"]::-webkit-outer-spin-button {
+      -webkit-appearance: none; /* إزالة أزرار السحب للأرقام */
+      margin: 0;
+    }
+
+    button.search-btn {
+      width: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(15px);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button.search-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.05);
+    }
+
+    button.search-btn i {
+      font-size: 1.5rem;
+    }
+
+    .sync-btn {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      backdrop-filter: blur(15px);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .sync-btn:hover {
+      background-color: rgba(0, 0, 0, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* قائمة اللغة */
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .language-switch select {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      outline: none;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .language-switch select:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="language-switch">
+    <select id="language" onchange="switchLanguage()">
+      <option value="ar" selected>العربية</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+  <div class="container">
+    <h1 id="title">PhoneMe</h1>
+    <p id="subtitle">تعرف على اسمك من خلال رقم هاتفك بسهولة</p>
+    <div class="search-bar">
+      <input id="inputPlaceholder" type="text" maxlength="15" placeholder="أدخل رقم هاتفك" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+      <button class="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+    <a id="syncText" href="#" class="sync-btn">زامن معانا الأرقام</a>
+  </div>
+
+  <script>
+    const translations = {
+      ar: {
+        title: "PhoneMe",
+        subtitle: "تعرف على اسمك من خلال رقم هاتفك بسهولة",
+        inputPlaceholder: "أدخل رقم هاتفك",
+        syncText: "زامن معانا الأرقام"
+      },
+      en: {
+        title: "PhoneMe",
+        subtitle: "Discover your name through your phone number",
+        inputPlaceholder: "Enter your phone number",
+        syncText: "Sync your contacts"
+      }
+    };
+
+    function switchLanguage() {
+      const lang = document.getElementById("language").value;
+      document.getElementById("title").textContent = translations[lang].title;
+      document.getElementById("subtitle").textContent = translations[lang].subtitle;
+      document.getElementById("inputPlaceholder").placeholder = translations[lang].inputPlaceholder;
+      document.getElementById("syncText").textContent = translations[lang].syncText;
+      document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    }
+  </script>
+</body>
+</html>
